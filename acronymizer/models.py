@@ -26,23 +26,27 @@ class Submission(models.Model):
 
 
 class AcronymToken(models.Model):
-    prepositions = {'a', 'ante', 'bajo', 'cabe', 'con', 'contra', 'de', 'desde', 'durante', 'en', 'entre', 'hacia', 'hasta', 'mediante', 'para', 'por', 'según', 'sin', 'so', 'sobre', 'tras'}
-    preposition_choices = {preposition: preposition for preposition in prepositions}
-
     submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
+
+    # Prepositions/conjunctions *may* optionally be part of the acronym
+    prepositions_and_conjunctions = ('a', 'ante', 'bajo', 'cabe', 'con', 'contra', 'de', 'desde', 'durante', 'en', 'entre',
+                                     'hacia', 'hasta', 'mediante', 'para', 'por', 'según', 'sin', 'so', 'sobre', 'tras',
+                                     'y', 'o', 'e', 'u')
+    # Sort the allowed words to make them easier to search in the admin interface
+    prepositions_and_conjunctions_choices = {
+        preposition_or_conjunction: 
+        preposition_or_conjunction for preposition_or_conjunction in sorted(prepositions_and_conjunctions)
+    }
+    preposition_or_conjunction = models.CharField(max_length=8, choices=prepositions_and_conjunctions_choices, null=True, blank=True)
+
     token = models.CharField(max_length=25)
-    # Prepositions *may* optionally be part of the acronym
-    preposition = models.CharField(max_length=8, choices=preposition_choices, null=True)
     order = models.IntegerField()
 
     def perfect(self):
-        return self.preposition is None
+        return self.preposition_or_conjunction is None
 
     def __str__(self):
-        return self.token \
-               + (' ' + self.preposition if self.preposition else '') \
-               + ' [' + str(self.order) + ']' \
-               + ' (' + self.submission.word + ')'
+        return ("({}) ".format(self.preposition_or_conjunction) if self.preposition_or_conjunction else '') + self.token
                
 
 
