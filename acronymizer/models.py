@@ -12,7 +12,7 @@ class Submission(models.Model):
     word = models.CharField(max_length=25)
     sent_date = models.DateTimeField(default=timezone.now)
     status = models.CharField(max_length=1, choices=status_choices, default='P') 
-    updated_date = models.DateTimeField(null=True)
+    updated_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.word \
