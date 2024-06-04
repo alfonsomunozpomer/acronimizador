@@ -15,12 +15,17 @@ class Submission(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return self.word \
-               + ' (' + self.sent_date.strftime('%Y-%m-%d %H:%M:%S') + '), ' \
-               + 'status: [' + self.status + ']' \
-               + (' ' + self.updated_date.strftime('%Y-%m-%d %H:%M:%S') if self.updated_date else '') \
-               + ' ' + str(self.acronymtoken_set.all())
+        return '{}: {} / status: [{}], created: {}, last update: {}'.format(
+            self.word,
+            self.definition(),
+            self.status,
+            self.sent_date.strftime('%Y-%m-%d %H:%M:%S'),
+            self.updated_date.strftime('%Y-%m-%d %H:%M:%S') if self.updated_date else '-'
+        )
     
+    def definition(self):
+        return ' '.join(map(str, sorted(self.acronymtoken_set.all(), key=lambda token: token.order)))
+
     def perfect(self):
         return all(token.perfect() for token in self.acronymtoken_set.all())
 
