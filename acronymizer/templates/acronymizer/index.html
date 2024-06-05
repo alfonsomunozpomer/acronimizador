@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <title>El Acronimizador</title>
+  </head>
+  <body>
+    <h1>El Acronimizador</h1>
+    {% if latest_definitions_list %}
+        <ul>
+        {% for definition in latest_definitions_list %}
+            <li><a href="/acronimizador/{{ definition.word }}/">{{ definition.word }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No hay ninguna definición todavía.</p>
+    {% endif %}
+  </body>
+</html>

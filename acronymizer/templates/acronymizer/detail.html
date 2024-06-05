@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <title>El Acronimizador</title>
+  </head>
+  <body>
+    <h1>El Acronimizador</h1>
+    <h2>{{ word }}</h2>
+    {% if definition_list %}
+        <ul>
+        {% for definition in definition_list %}
+            <li>{{ definition.definition }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No hay ninguna definición aceptada todavía.</p>
+    {% endif %}
+  </body>
+</html>
