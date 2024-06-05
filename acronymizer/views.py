@@ -5,7 +5,7 @@ from django.template import loader
 from .models import Submission
 
 def index(request):
-    latest_definitions = Submission.objects.filter(status='A').order_by('word').order_by('-sent_date')
+    latest_definitions = Submission.objects.filter(status='A').order_by('word')
     context = {
         'latest_definitions_list': latest_definitions,
     }
